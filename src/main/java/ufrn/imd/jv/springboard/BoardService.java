@@ -23,24 +23,24 @@ public class BoardService {
     }
 
     public BoardEntity save(BoardEntity boardEntity) {
-        if(boardEntity == null) {
+        if (boardEntity == null) {
             throw new RuntimeException("Entidade não informada");
         }
         if (boardEntity.getUserId() == null) {
             throw new RuntimeException("Usuário não informado");
         }
-        ResponseEntity<Map<String,String>> response = userService.getUser(boardEntity.getUserId());
-        if(!response.getStatusCode().is2xxSuccessful()) {
+        ResponseEntity<Map<String, String>> response = userService.getUser(boardEntity.getUserId());
+        if (!response.getStatusCode().is2xxSuccessful()) {
             throw new RuntimeException("Usuário informado não existe");
         }
         if (boardEntity.getName() == null) {
             throw new RuntimeException("Nome do board não informado");
         }
-        if(boardEntity.getName().trim().equals("")) {
+        if (boardEntity.getName().trim().equals("")) {
             throw new RuntimeException("Nome do board informado é inválido");
         }
         Optional<BoardEntity> optValue = repository.findByName(boardEntity.getName());
-        if(optValue.isPresent()) {
+        if (optValue.isPresent()) {
             throw new RuntimeException("Nome do board já está em uso");
         }
         return repository.save(boardEntity);

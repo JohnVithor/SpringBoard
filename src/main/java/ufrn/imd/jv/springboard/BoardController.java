@@ -32,8 +32,8 @@ public class BoardController {
 
     @GetMapping(path = "user/{id}")
     public ResponseEntity<Page<BoardEntity>> getByUserId(@PathVariable Long id,
-                                                        @RequestParam(name = "pg", required = false) Optional<Integer> page,
-                                                        @RequestParam(name = "lim", required = false) Optional<Integer> limit) {
+                                                         @RequestParam(name = "pg", required = false) Optional<Integer> page,
+                                                         @RequestParam(name = "lim", required = false) Optional<Integer> limit) {
         return service.getByUserId(id, page.orElse(0), limit.orElse(10));
     }
 
