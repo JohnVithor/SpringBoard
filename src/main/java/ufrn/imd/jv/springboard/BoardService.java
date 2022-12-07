@@ -6,19 +6,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 import java.util.Optional;
 
 @Service
 public class BoardService {
 
-    private final UserServiceInterface userService;
+    private final BoardResilience resilience;
 
     private final BoardRepository repository;
 
     @Autowired
-    public BoardService(UserServiceInterface service, BoardRepository repository) {
-        this.userService = service;
+    public BoardService(BoardResilience resilience, BoardRepository repository) {
+        this.resilience = resilience;
         this.repository = repository;
     }
 
@@ -29,8 +28,7 @@ public class BoardService {
         if (boardEntity.getUserId() == null) {
             throw new RuntimeException("Usuário não informado");
         }
-        ResponseEntity<Map<String, String>> response = userService.getUser(boardEntity.getUserId());
-        if (!response.getStatusCode().is2xxSuccessful()) {
+        if (!resilience.isUserValid(boardEntity.getUserId())) {
             throw new RuntimeException("Usuário informado não existe");
         }
         if (boardEntity.getName() == null) {

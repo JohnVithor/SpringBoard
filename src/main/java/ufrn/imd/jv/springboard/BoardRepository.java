@@ -13,4 +13,6 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
     Page<BoardEntity> findByUserIdIs(Long id, PageRequest pageRequest);
 
     Optional<BoardEntity> findByName(String name);
+
+    boolean existsByUserId(Long id);
 }
