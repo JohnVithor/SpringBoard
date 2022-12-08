@@ -20,11 +20,12 @@ public class BoardResilience {
     }
 
     @CircuitBreaker(name = "isUserValid_cb", fallbackMethod = "isUserKnown")
-    @Bulkhead(name = "isUserValid_bh", fallbackMethod = "isUserKnown")
+    @Bulkhead(name = "isUserValid_bh", fallbackMethod = "isUserKnown", type = Bulkhead.Type.THREADPOOL)
     public boolean isUserValid(Long id) {
         ResponseEntity<Map<String, String>> response = userService.getUser(id);
         return response.getStatusCode().is2xxSuccessful();
     }
+
     public boolean isUserKnown(Long id, Throwable t) {
         System.err.println(
                 "Não foi possível consultar o service de usuários devido a: " +
@@ -35,7 +36,7 @@ public class BoardResilience {
             System.err.println("Usuário foi encontrado, portanto é válido");
             return true;
         } else {
-            System.err.println("Não foi encontrado board criado pelo usuário de id="+id);
+            System.err.println("Não foi encontrado board criado pelo usuário de id=" + id);
             return false;
         }
     }
