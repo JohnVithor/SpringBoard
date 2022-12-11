@@ -20,7 +20,7 @@ public class BoardResilience {
     }
 
     @CircuitBreaker(name = "isUserValid_cb", fallbackMethod = "isUserKnown")
-    @Bulkhead(name = "isUserValid_bh", fallbackMethod = "isUserKnown", type = Bulkhead.Type.THREADPOOL)
+    @Bulkhead(name = "isUserValid_bh", fallbackMethod = "isUserKnown")
     public boolean isUserValid(Long id) {
         ResponseEntity<Map<String, String>> response = userService.getUser(id);
         return response.getStatusCode().is2xxSuccessful();
